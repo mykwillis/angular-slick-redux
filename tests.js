@@ -2,7 +2,7 @@
  * Copyright (C) 2016, Myk Willis.
  */
 
-/* global describe, inject, module, beforeEach, afterEach, it, expect, spyOn, jasmine */
+/* global describe, inject, module, beforeEach, afterEach, it */
 
 'use strict';
 

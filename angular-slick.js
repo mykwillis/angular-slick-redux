@@ -1,7 +1,9 @@
 /* angular-slick.js / v0.1.0 / (c) 2016 Myk Willis / MIT Licence */
+'use strict';
+
 angular.module('angularSlick', []).directive('slick', [
-  '$timeout',
-  function ($timeout) {
+  '$timeout', '$apply',
+  function ($timeout, $apply) {
     return {
       restrict: 'AEC',
       scope: {
@@ -64,11 +66,11 @@ angular.module('angularSlick', []).directive('slick', [
         onSwipe: '&',
 
         // angular-slick-specific settings.
-        initOnload: '@',    // if false, slick is only initialized when `data` is non-null
+        initOnLoad: '@',    // if false, slick is only initialized when `data` is non-null
         currentIndex: '=',  // two-way; can be used to get or set current slide index
-        data: '='           // set to underlying dataset being used to cause automatic re-init on change
+        data: '='           // bind to underlying data to force utomatic re-init on change
       },
-      link: function (scope, element, attrs) {
+      link: function (scope, element) {
         var initialized = false;
 
         function initializeSlick() {
@@ -144,23 +146,28 @@ angular.module('angularSlick', []).directive('slick', [
           initialized = false;
         }
 
-        scope.$watch('currentIndex', function (newVal, oldVal) {
-          if (newVal !== currentIndex) {
+        scope.$watch('currentIndex', function (newVal) {
+          var slider = $(element);
+          if (newVal !== scope.currentIndex) {
             slider.slick('slickGoTo', newVal);
           }
         });
 
-        scope.$watch('data', function(newVal, oldVal) {
+        scope.$watch('data', function(newVal) {
           if (initialized) {
             destroySlick();
           }
           if (newVal) {
-            initializeSlick();
+            $timeout(function() {
+              initializeSlick();
+            });
           }
         });
 
         if (scope.initOnLoad) {
-          initializeSlick();
+          $timeout(function() {
+            initializeSlick();
+          });
         }
       }
     };

@@ -2,8 +2,8 @@
 'use strict';
 
 angular.module('angularSlick', []).directive('slick', [
-  '$timeout', '$apply',
-  function ($timeout, $apply) {
+  '$timeout',
+  function ($timeout) {
     return {
       restrict: 'AEC',
       scope: {
@@ -74,7 +74,7 @@ angular.module('angularSlick', []).directive('slick', [
         var initialized = false;
 
         function initializeSlick() {
-          var slider = $(element);
+          var slider = element;
 
           //
           // As per the Slick documentation, we need to hook up any event
@@ -91,7 +91,7 @@ angular.module('angularSlick', []).directive('slick', [
           slider.on('onAfterChange', function _onAfterChange(event, slick, currentSlide) {
             void(event);
             void(slick);
-            $apply(function() {
+            scope.$apply(function() {
               scope.currentIndex = currentSlide;
             });
           });
@@ -141,15 +141,13 @@ angular.module('angularSlick', []).directive('slick', [
         }
 
         function destroySlick() {
-          var slider = $(element);
-          slider.unslick();
+          element.unslick();
           initialized = false;
         }
 
         scope.$watch('currentIndex', function (newVal) {
-          var slider = $(element);
           if (newVal !== scope.currentIndex) {
-            slider.slick('slickGoTo', newVal);
+            element.slick('slickGoTo', newVal);
           }
         });
 

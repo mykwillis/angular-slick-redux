@@ -1,6 +1,6 @@
 angular-slick
 =============
-[![Build Status](https://travis-ci.org/mykwillis/angular-click.png?branch=master)](https://travis-ci.org/mykwillis/angular-slick)
+[![Build Status](https://travis-ci.org/mykwillis/angular-slick.png?branch=master)](https://travis-ci.org/mykwillis/angular-slick)
 
 AngularJS directive for [slick-carousel](http://kenwheeler.github.io/slick/).
 

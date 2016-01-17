@@ -2,10 +2,9 @@
 'use strict';
 
 angular.module('angularSlick', []).directive('slick', [
-  '$timeout',
-  function ($timeout) {
+  function () {
     return {
-      restrict: 'AEC',
+      restrict: 'AE',
       scope: {
         // Settings defined by underlying slick-carousel
         accessibility: '@',
@@ -72,9 +71,9 @@ angular.module('angularSlick', []).directive('slick', [
       },
       link: function (scope, element) {
         var initialized = false;
+        var slider = element;
 
         function initializeSlick() {
-          var slider = element;
 
           //
           // As per the Slick documentation, we need to hook up any event
@@ -101,14 +100,15 @@ angular.module('angularSlick', []).directive('slick', [
            'onEdge', 'onInit', 'onReInit', 'onSetPosition', 'onSwipe'];
 
           angular.forEach(handlerNames, function(handlerName) {
-            if ( typeof scope[handlerName] !== 'undefined' ) {
+            // handler attributes are bound with @, which means that scope[handlerName] contains
+            // an angular-supplied function that will evaluate the current value of the attribute.
+            var handler = scope[handlerName]();   // get user-supplied handler function
+            if ( typeof handler !== 'undefined' ) {
 
               // e.g., 'onAfterChange' -> 'afterChange'
-              var eventName = handlerName.charAt(2).toLowerCase() + handlerName.slice(2);
+              var eventName = handlerName.charAt(2).toLowerCase() + handlerName.slice(3);
 
-              // Passing arguments to callbacks specified in angular directives is weird.
-              // http://weblogs.asp.net/dwahlin/creating-custom-angularjs-directives-part-3-isolate-scope-and-function-parameters
-              slider.on(eventName, scope[handlerName]());   // N.B. the ()'s are intentional!
+              slider.on(eventName, handler);
             }
           });
 
@@ -141,31 +141,29 @@ angular.module('angularSlick', []).directive('slick', [
         }
 
         function destroySlick() {
-          element.unslick();
+          slider.slick('unslick');
           initialized = false;
         }
 
         scope.$watch('currentIndex', function (newVal) {
           if (newVal !== scope.currentIndex) {
-            element.slick('slickGoTo', newVal);
+            slider.slick('slickGoTo', newVal);
           }
         });
 
-        scope.$watch('data', function(newVal) {
-          if (initialized) {
-            destroySlick();
-          }
-          if (newVal) {
-            $timeout(function() {
+        scope.$watch('data', function(newVal, oldVal) {
+          if (newVal !== oldVal) {    // ignore first call
+            if (initialized) {
+              destroySlick();
+            }
+            if (newVal) {
               initializeSlick();
-            });
+            }
           }
         });
 
         if (scope.initOnLoad) {
-          $timeout(function() {
-            initializeSlick();
-          });
+          initializeSlick();
         }
       }
     };

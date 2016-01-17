@@ -13,10 +13,12 @@ module.exports = function (config) {
 		autoWatch: true,
 		reporters: ['dots', 'coverage'],
 		files: [
+      'bower_components/jquery/dist/jquery.js',
 			'bower_components/angular/angular.js',
-			'bower_components/slick-carousel/slick.js',
+      'bower_components/angular-mocks/angular-mocks.js',
+
+      'bower_components/slick-carousel/slick/slick.js',
 			'angular-slick.js',
-			'bower_components/angular-mocks/angular-mocks.js',
 			'tests.js'
 		],
 		preprocessors: {

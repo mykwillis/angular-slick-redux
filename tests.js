@@ -21,21 +21,38 @@ describe('module angularSlick', function () {
     $timeout = $injector.get('$timeout');
 	}));
 
+  function compileTemplate(template, scope) {
+    if (!scope) {
+      scope = $rootScope.$new();
+    }
+    var el = $compile(angular.element(template))(scope);
+    scope.$digest();
+    return el;
+  }
   beforeEach(function() {
     scope = $rootScope.$new();
-    var el = angular.element('<slick init-on-load="true"></slick>');
-    el = $compile(el)(scope);
-    scope.$digest();
-    element = el;
   });
 
 	afterEach(function () {
 	});
 
   describe('slick directive', function () {
-		it('should work', function () {
+    it('should work', function () {
+      element = compileTemplate('<slick init-on-load="true"></slick>');
       expect(element).toBeDefined();
       expect(element.hasClass('slick-initialized')).toBe(true);
+    });
+  });
+
+  describe('Callback methods', function () {
+    it('onInit invoked after init', function () {
+      var scope = $rootScope.$new();
+      var called = false;
+      scope.myOnInit = function() {
+        called = true;
+      };
+      element = compileTemplate('<slick init-on-load="true" on-init="myOnInit"></slick>', scope);
+      expect(called).toBe(true);
     });
 	});
 });

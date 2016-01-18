@@ -55,4 +55,27 @@ describe('module angularSlick', function () {
       expect(called).toBe(true);
     });
 	});
+
+  describe('slide changes', function() {
+    it('changes current index', function() {
+      var scope = $rootScope.$new();
+      scope.currentIndex = 0;
+      element = compileTemplate(
+        '<slick init-on-load="true" current-index="currentIndex">' +
+          '<div>1</div>' +
+          '<div>2</div>' +
+          '<div>3</div>' +
+        '</slick>',
+        scope
+      );
+
+      scope.$apply(function() {
+        scope.currentIndex = 1;
+      });
+      scope.$digest();
+
+      expect(element.slick('slickCurrentSlide')).toBe(1);
+    });
+  });
+
 });

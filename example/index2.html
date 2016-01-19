@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+
+<!--This example demonstrates how to use an <ng-repeat> as a child of the
+slick slider. -->
+
 <html>
 <head>
   <title>Angular Slick Carousel</title>
@@ -8,11 +12,13 @@
 
 <body ng-app="testApp" ng-controller="MainCtrl">
 
-<slick init-on-load="true">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
+<slick init-on-load="true" data="data" ng-if="dataLoaded">
+  <div class="dataItem" ng-repeat="item in data">
+    {{ item }}
+  </div>
 </slick>
+
+<button type="button" ng-click="updateData()">Ok</button>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
@@ -21,7 +27,17 @@
 <script src="..//angular-slick.js"></script>
 <script>
   angular.module('testApp', ['angularSlick'])
-    .controller('MainCtrl', function() {
+    .controller('MainCtrl', function($scope, $timeout) {
+      $scope.data = ['item1', 'item2', 'item3'];
+      $scope.dataLoaded = true;
+
+      $scope.updateData = function() {
+        $scope.dataLoaded = false;
+        $timeout(function() {
+          $scope.data = ['newitem1', 'newitem2'];
+          $scope.dataLoaded = true;
+        });
+      }
     });
 </script>
 </body>

@@ -78,4 +78,32 @@ describe('module angularSlick', function () {
     });
   });
 
+  describe('data binding', function() {
+    it('rebuilds when data changes', function() {
+      var scope = $rootScope.$new();
+      scope.data = ['item1', 'item2'];
+      scope.dataReady = true;
+      element = compileTemplate(
+        '<slick ng-if="dataReady" data="data">' +
+        '  <div class="dataItem" ng-repeat="item in data"></div>' +
+        '</slick>', scope);
+
+      $timeout(function() {
+        expect(element.find('.dataItem').length).toBe(2);
+        scope.$apply(function() {
+          scope.dataReady = false;
+          $timeout(function() {
+            scope.data = ['newitem1', 'newitem2', 'newitem3'];
+            scope.dataReady = true;
+            $timeout(function() {
+              expect(element.find('.dataItem').length).toBe(3);
+            });
+          });
+        });
+      });
+
+
+    });
+  });
+
 });

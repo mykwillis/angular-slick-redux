@@ -41,6 +41,43 @@ That being done, you can use the `<slick>` directive in your templates like:
 </slick>
 ```
 
+
+Using ng-repeat for Slide Data
+------------------------------
+It's common to want to populate the slides to be used with angular-slick with the
+`ngRepeat` directive. Because of the way the (jQuery-based) slick-carousel control
+manipulates the DOM, you have to be sure that it is disabled (via `ng-if`) whenever
+the data supplying the ngRepeat is manipulated.
+
+The general pattern to use is like this:
+
+    <slick ng-if="dataReady">
+      <div ng-repeat="item in data">
+        {{ item }}
+      </div>
+    </slick>
+
+Then in the controller that populates `controller`:
+
+    ```JavaScript
+    function Controller($scope, $timeout) {
+      function _updateData(newData) {
+        // We need to allow Angular to run two digest cycles; during the first
+        // one we remove the <slick> element by causing `ng-if` to evaluate to
+        // `false`, and only then do we update the $scope data and allow the
+        // ng-repeat to re-render. $timeout runs after the digest cycle is
+        // complete.
+        $scope.dataReady = false;   // remove <slick> element on this digest cycle
+        $timeout(function() {       // after digest is complete, update ng-repeat data
+          $scope.data = newData
+          $scope.dataReady = true;
+        });
+    }
+
+If you don't disable <slick> when changing data, the ng-repeat directive gets really
+confused by the cruft it left in the DOM and Bad Things happen.
+
+
 Callbacks
 ----------
 There are several callback functions you can register to be used as event handlers

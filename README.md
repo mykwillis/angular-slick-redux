@@ -57,16 +57,11 @@ The general pattern to use is like this:
       </div>
     </slick>
 
-Then in the controller that populates `controller`:
+Then in the controller that populates `data`:
 
     ```JavaScript
     function Controller($scope, $timeout) {
       function _updateData(newData) {
-        // We need to allow Angular to run two digest cycles; during the first
-        // one we remove the <slick> element by causing `ng-if` to evaluate to
-        // `false`, and only then do we update the $scope data and allow the
-        // ng-repeat to re-render. $timeout runs after the digest cycle is
-        // complete.
         $scope.dataReady = false;   // remove <slick> element on this digest cycle
         $timeout(function() {       // after digest is complete, update ng-repeat data
           $scope.data = newData
@@ -75,7 +70,7 @@ Then in the controller that populates `controller`:
     }
 
 If you don't disable <slick> when changing data, the ng-repeat directive gets really
-confused by the cruft it left in the DOM and Bad Things happen.
+confused by the cruft <slick> left in the DOM, and Bad Things happen.
 
 
 Callbacks

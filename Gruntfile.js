@@ -45,7 +45,14 @@ module.exports = function (grunt) {
 				src: 'angular-slick.js',
 				title: 'angular-slick API Documentation'
 			}
-		}
+		},
+    bump: {
+      options: {
+        files: ['package.json', 'bower.json', 'README.md'],
+        commit: false,
+        push: false
+      }
+    }
 	});
 
 	grunt.registerTask('test', [

@@ -153,7 +153,7 @@ angular.module('angularSlick', []).directive('slick', [
 
         scope.$watch('data', function(newVal, oldVal) {
           // If this is the first call, and nothing has been bound to data (e.g.,
-          // it was supplied as an attribute), do nothing.
+          // it was not supplied as an attribute), do nothing.
           if (typeof newVal === 'undefined' && typeof oldVal === 'undefined') {
             return;
           }

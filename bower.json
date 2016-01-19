@@ -1,5 +1,6 @@
 {
 	"name": "angular-slick",
+  "version": "0.1.0",
 	"description": "AngularJS directives for `slick-carousel`",
 	"author": "Myk Willis",
 	"license": "MIT",

@@ -15,6 +15,8 @@ Installation
 * Through npm: `npm install angular-slick --save`
 * Download from github: [angular-slick.min.js](https://raw.github.com/mykwillis/angular-slick/master/angular-slick.min.js)
 
+Latest version is v0.1.0.
+
 
 Usage
 -----
